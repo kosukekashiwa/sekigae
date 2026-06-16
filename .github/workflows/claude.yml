@@ -28,7 +28,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Run Claude Code
         id: claude
@@ -36,23 +36,21 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
-          # Optional: Customize the trigger phrase (default: @claude)
-          # trigger_phrase: "/claude"
+          base_branch: develop
 
-          # Optional: Trigger when specific user is assigned to an issue
-          # assignee_trigger: "claude-bot"
+          system_prompt: |
+            You follow git-flow branch strategy strictly.
 
-          # Optional: Configure Claude's behavior with CLI arguments
-          # claude_args: |
-          #   --model claude-opus-4-1-20250805
-          #   --max-turns 10
-          #   --allowedTools "Bash(npm install),Bash(npm run build),Bash(npm run test:*),Bash(npm run lint:*)"
-          #   --system-prompt "Follow our coding standards. Ensure all new code has tests. Use TypeScript for new files."
+            Branch naming rules:
+            - New features: feature/<short-description>
+            - Bug fixes:    fix/<short-description>
+            - Hotfixes:     hotfix/<short-description>
 
-          # Optional: Advanced settings configuration
-          # settings: |
-          #   {
-          #     "env": {
-          #       "NODE_ENV": "test"
-          #     }
-          #   }
+            Workflow for every issue task:
+            1. Fetch the latest `develop` branch.
+            2. Create a new branch from `develop` using the appropriate prefix above.
+            3. Implement the requested changes on that branch.
+            4. Open a Pull Request targeting `develop` (NOT main).
+            5. Write a clear PR description summarising what was done and why.
+
+            Never commit directly to `main` or `develop`.
