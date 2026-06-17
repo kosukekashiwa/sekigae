@@ -126,7 +126,14 @@ function Workspace() {
         )}
       </header>
 
-      <div className="flex min-h-0 flex-1">
+      {/* Unsupported viewport notice (screen-size based, not user-agent based) */}
+      <div className="flex min-h-0 flex-1 items-center justify-center bg-gray-50 lg:hidden">
+        <p className="text-sm font-medium text-gray-600">
+          PCで利用してください。
+        </p>
+      </div>
+
+      <div className="hidden min-h-0 flex-1 lg:flex">
         {/* Sidebar */}
         <aside className="flex w-[340px] shrink-0 flex-col border-r border-gray-200 bg-white">
           <div className="flex shrink-0 border-b border-gray-200">
