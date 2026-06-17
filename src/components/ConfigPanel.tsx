@@ -26,12 +26,6 @@ export default function ConfigPanel({
 }: ConfigPanelProps) {
   const { grid, setGrid, resetSeatConfigs } = useApp();
 
-  const handleReset = () => {
-    if (window.confirm("全ての座席の設定をリセットしますか？")) {
-      resetSeatConfigs();
-    }
-  };
-
   return (
     <div className="flex h-full flex-col gap-5 p-4">
       <section>
@@ -112,7 +106,7 @@ export default function ConfigPanel({
       <section>
         <button
           type="button"
-          onClick={handleReset}
+          onClick={resetSeatConfigs}
           className="w-full rounded-md border border-red-300 bg-red-50 px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-100"
         >
           座席状態リセット
