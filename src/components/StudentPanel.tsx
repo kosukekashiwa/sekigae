@@ -34,11 +34,6 @@ export default function StudentPanel({
     downloadCsv("students_template.csv", csv);
   }
 
-  function handleExport() {
-    const csv = studentsToCsv(students);
-    downloadCsv("students.csv", csv);
-  }
-
   function handleImportClick() {
     fileRef.current?.click();
   }
@@ -70,13 +65,6 @@ export default function StudentPanel({
           className="rounded-md bg-sky-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-sky-700"
         >
           インポート
-        </button>
-        <button
-          onClick={handleExport}
-          disabled={students.length === 0}
-          className="rounded-md bg-slate-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-40"
-        >
-          エクスポート
         </button>
         <input
           ref={fileRef}
