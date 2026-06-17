@@ -117,7 +117,9 @@ function Workspace() {
     <div className="flex h-screen flex-col">
       {/* Header */}
       <header className="flex h-14 shrink-0 items-center gap-2 bg-indigo-700 px-5 text-white shadow">
-        <span className="text-xl">🪑</span>
+        <span className="text-xl" aria-hidden="true">
+          🪑
+        </span>
         <h1 className="text-lg font-bold tracking-wide">席替えアプリ</h1>
         {assigningNo != null && (
           <span className="ml-4 rounded bg-amber-400 px-2 py-0.5 text-xs font-semibold text-amber-900">
