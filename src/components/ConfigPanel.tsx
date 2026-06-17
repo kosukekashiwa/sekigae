@@ -24,7 +24,7 @@ export default function ConfigPanel({
   selectedKind,
   onSelectKind,
 }: ConfigPanelProps) {
-  const { grid, setGrid } = useApp();
+  const { grid, setGrid, resetSeatConfigs } = useApp();
 
   return (
     <div className="flex h-full flex-col gap-5 p-4">
@@ -101,6 +101,19 @@ export default function ConfigPanel({
             </label>
           ))}
         </div>
+      </section>
+
+      <section>
+        <button
+          type="button"
+          onClick={resetSeatConfigs}
+          className="w-full rounded-md border border-red-300 bg-red-50 px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-100"
+        >
+          座席状態リセット
+        </button>
+        <p className="mt-1 text-xs text-gray-400">
+          全ての座席を「指定なし」にし、優先席の設定を外します。
+        </p>
       </section>
     </div>
   );
