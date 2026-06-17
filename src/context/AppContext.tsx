@@ -25,6 +25,7 @@ interface AppState {
   assignSeat: (attendanceNo: number, seatNo: number) => void;
   clearSeat: (attendanceNo: number) => void;
   clearSeatByNo: (seatNo: number) => void;
+  resetSeatConfigs: () => void;
 }
 
 const Ctx = createContext<AppState | null>(null);
@@ -114,6 +115,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
   }, []);
 
+  const resetSeatConfigs = useCallback(() => {
+    setConfigs((prev) =>
+      ensureConfigLength(prev, grid).map(() => ({
+        kind: "none",
+        priority: false,
+      })),
+    );
+  }, [grid]);
+
   const value = useMemo<AppState>(
     () => ({
       students,
@@ -126,6 +136,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       assignSeat,
       clearSeat,
       clearSeatByNo,
+      resetSeatConfigs,
     }),
     [
       students,
@@ -138,6 +149,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       assignSeat,
       clearSeat,
       clearSeatByNo,
+      resetSeatConfigs,
     ],
   );
 

@@ -117,7 +117,9 @@ function Workspace() {
     <div className="flex h-screen flex-col">
       {/* Header */}
       <header className="flex h-14 shrink-0 items-center gap-2 bg-indigo-700 px-5 text-white shadow">
-        <span className="text-xl">🪑</span>
+        <span className="text-xl" aria-hidden="true">
+          🪑
+        </span>
         <h1 className="text-lg font-bold tracking-wide">席替えアプリ</h1>
         {assigningNo != null && (
           <span className="ml-4 rounded bg-amber-400 px-2 py-0.5 text-xs font-semibold text-amber-900">
@@ -126,7 +128,14 @@ function Workspace() {
         )}
       </header>
 
-      <div className="flex min-h-0 flex-1">
+      {/* Unsupported viewport notice (screen-size based, not user-agent based) */}
+      <div className="flex min-h-0 flex-1 items-center justify-center bg-gray-50 lg:hidden">
+        <p className="text-sm font-medium text-gray-600">
+          PCで利用してください。
+        </p>
+      </div>
+
+      <div className="hidden min-h-0 flex-1 lg:flex">
         {/* Sidebar */}
         <aside className="flex w-[340px] shrink-0 flex-col border-r border-gray-200 bg-white">
           <div className="flex shrink-0 border-b border-gray-200">
