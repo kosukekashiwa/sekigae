@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { AppProvider, useApp } from "@/context/AppContext";
+import { useApp } from "@/context/AppContext";
+import Header from "@/components/Header";
 import StudentPanel from "@/components/StudentPanel";
 import ConfigPanel from "@/components/ConfigPanel";
 import SeatGrid from "@/components/SeatGrid";
@@ -115,18 +116,13 @@ function Workspace() {
 
   return (
     <div className="flex h-screen flex-col">
-      {/* Header */}
-      <header className="flex h-14 shrink-0 items-center gap-2 bg-indigo-700 px-5 text-white shadow">
-        <span className="text-xl" aria-hidden="true">
-          🪑
-        </span>
-        <h1 className="text-lg font-bold tracking-wide">席替えアプリ</h1>
+      <Header>
         {assigningNo != null && (
           <span className="ml-4 rounded bg-amber-400 px-2 py-0.5 text-xs font-semibold text-amber-900">
             指定モード: 空席をクリックしてください
           </span>
         )}
-      </header>
+      </Header>
 
       {/* Unsupported viewport notice (screen-size based, not user-agent based) */}
       <div className="flex min-h-0 flex-1 items-center justify-center bg-gray-50 lg:hidden">
@@ -199,9 +195,5 @@ function Workspace() {
 }
 
 export default function Page() {
-  return (
-    <AppProvider>
-      <Workspace />
-    </AppProvider>
-  );
+  return <Workspace />;
 }

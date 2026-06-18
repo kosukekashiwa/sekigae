@@ -179,6 +179,36 @@ export function parseCsv(text: string): ParseResult {
   return { students, errors };
 }
 
+/** Validate an already-structured student list (e.g. edited in a table). */
+export function validateStudents(students: Student[]): RowError[] {
+  const errors: RowError[] = [];
+  const seenAttendance = new Set<number>();
+  const seenReserved = new Set<number>();
+  for (const s of students) {
+    if (seenAttendance.has(s.attendanceNo)) {
+      errors.push({
+        attendanceNo: s.attendanceNo,
+        message: "出席番号は重複のない半角数字を設定してください。",
+      });
+    } else {
+      seenAttendance.add(s.attendanceNo);
+    }
+
+    if (s.reservedSeat != null) {
+      if (seenReserved.has(s.reservedSeat)) {
+        errors.push({
+          attendanceNo: s.attendanceNo,
+          message:
+            "予約座席番号は重複のない半角数字、または未入力にしてください。",
+        });
+      } else {
+        seenReserved.add(s.reservedSeat);
+      }
+    }
+  }
+  return errors;
+}
+
 export function downloadCsv(filename: string, content: string) {
   const blob = new Blob(["\uFEFF" + content], {
     type: "text/csv;charset=utf-8;",

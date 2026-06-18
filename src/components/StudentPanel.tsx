@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { useApp } from "@/context/AppContext";
 import {
   buildTemplateStudents,
@@ -73,6 +74,12 @@ export default function StudentPanel({
           onChange={handleFile}
           className="hidden"
         />
+        <Link
+          href="/students"
+          className="rounded-md bg-gray-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700"
+        >
+          編集
+        </Link>
       </div>
 
       {/* error list */}
@@ -93,7 +100,7 @@ export default function StudentPanel({
       <div className="flex-1 overflow-auto p-3">
         {students.length === 0 ? (
           <p className="px-1 py-6 text-center text-sm text-gray-500">
-            生徒一覧のcsvをインポートしてください。
+            生徒一覧のcsvをインポート、または、「編集」から設定してください。
           </p>
         ) : (
           <table className="w-full table-fixed text-sm">
