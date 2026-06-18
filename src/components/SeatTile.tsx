@@ -34,7 +34,7 @@ export default function SeatTile({
   return (
     <div
       className={[
-        "relative aspect-[4/3] w-full rounded-md border-2 transition",
+        "relative h-full w-full rounded-md border-2 transition",
         baseClasses(view),
         blinking ? "seat-blink z-10" : "",
       ].join(" ")}

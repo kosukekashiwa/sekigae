@@ -180,7 +180,7 @@ function Workspace() {
         </aside>
 
         {/* Main */}
-        <main className="min-w-0 flex-1 overflow-auto bg-gray-50 p-6">
+        <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-gray-50 p-6">
           <SeatGrid
             blinkingSeats={blinking}
             mode={mode}
