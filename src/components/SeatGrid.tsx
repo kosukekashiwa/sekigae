@@ -70,16 +70,17 @@ export default function SeatGrid({
   }
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
+    <div className="mx-auto flex h-full w-full max-w-4xl flex-col">
       {/* Blackboard */}
-      <div className="mx-auto mb-6 flex h-14 w-3/4 items-center justify-center rounded-md border-4 border-amber-900/40 bg-[var(--chalk-board)] text-lg font-semibold tracking-widest text-white shadow-inner">
+      <div className="mx-auto mb-4 flex h-12 w-3/4 shrink-0 items-center justify-center rounded-md border-4 border-amber-900/40 bg-[var(--chalk-board)] text-lg font-semibold tracking-widest text-white shadow-inner">
         黒板
       </div>
 
       <div
-        className="grid gap-2"
+        className="grid min-h-0 flex-1 gap-2"
         style={{
           gridTemplateColumns: `repeat(${grid.cols}, minmax(0, 1fr))`,
+          gridTemplateRows: `repeat(${grid.rows}, minmax(0, 1fr))`,
         }}
       >
         {views.map((view) => {
