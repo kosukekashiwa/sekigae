@@ -161,11 +161,11 @@ export default function StudentsEditPage() {
         )}
 
         <div className="min-h-0 flex-1 overflow-auto p-3">
-          <table className="w-full table-fixed text-sm">
+          <table className="table-fixed text-sm mx-auto">
             <thead>
               <tr className="border-b border-gray-200 text-left text-gray-500">
                 <th className="w-24 py-1.5">出席番号</th>
-                <th className="py-1.5">名前</th>
+                <th className="w-[120px] py-1.5">名前</th>
                 <th className="w-24 py-1.5">性別</th>
                 <th className="w-32 py-1.5">予約座席番号</th>
                 <th className="w-16 py-1.5">操作</th>
