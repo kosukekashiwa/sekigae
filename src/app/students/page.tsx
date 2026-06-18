@@ -18,9 +18,13 @@ export default function StudentsEditPage() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [draft, setDraft] = useState<Student[]>(() =>
-    students.length > 0 ? students : buildTemplateStudents(),
+    renumber(students.length > 0 ? students : buildTemplateStudents()),
   );
   const [errors, setErrors] = useState<RowError[]>([]);
+
+  function renumber(list: Student[]): Student[] {
+    return list.map((s, i) => ({ ...s, attendanceNo: i + 1 }));
+  }
 
   function updateRow(index: number, patch: Partial<Student>) {
     setDraft((prev) =>
@@ -29,26 +33,22 @@ export default function StudentsEditPage() {
   }
 
   function handleAddRow() {
-    setDraft((prev) => {
-      const nextNo =
-        prev.length > 0
-          ? Math.max(...prev.map((s) => s.attendanceNo)) + 1
-          : 1;
-      return [
+    setDraft((prev) =>
+      renumber([
         ...prev,
         {
-          attendanceNo: nextNo,
+          attendanceNo: 0,
           name: "",
           gender: "男",
           reservedSeat: null,
           assignedSeat: null,
         },
-      ];
-    });
+      ]),
+    );
   }
 
   function handleDeleteRow(index: number) {
-    setDraft((prev) => prev.filter((_, i) => i !== index));
+    setDraft((prev) => renumber(prev.filter((_, i) => i !== index)));
   }
 
   function handleExport() {
@@ -66,7 +66,7 @@ export default function StudentsEditPage() {
     reader.onload = () => {
       const text = String(reader.result ?? "");
       const { students: parsed, errors: errs } = parseCsv(text);
-      setDraft(parsed);
+      setDraft(renumber(parsed));
       setErrors(errs);
     };
     reader.readAsText(file, "UTF-8");
@@ -168,21 +168,7 @@ export default function StudentsEditPage() {
             <tbody>
               {draft.map((s, i) => (
                 <tr key={i} className="border-b border-gray-100">
-                  <td className="py-1.5 align-middle pr-2">
-                    <input
-                      type="number"
-                      min={1}
-                      step={1}
-                      value={s.attendanceNo}
-                      onChange={(e) => {
-                        const value = parseInt(e.target.value, 10);
-                        if (Number.isInteger(value) && value > 0) {
-                          updateRow(i, { attendanceNo: value });
-                        }
-                      }}
-                      className="w-full rounded border border-gray-300 px-2 py-1"
-                    />
-                  </td>
+                  <td className="py-1.5 align-middle pr-2">{s.attendanceNo}</td>
                   <td className="py-1.5 align-middle pr-2">
                     <input
                       type="text"
