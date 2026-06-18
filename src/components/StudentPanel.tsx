@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { useApp } from "@/context/AppContext";
 import {
   buildTemplateStudents,
@@ -73,6 +74,12 @@ export default function StudentPanel({
           onChange={handleFile}
           className="hidden"
         />
+        <Link
+          href="/students"
+          className="rounded-md bg-gray-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700"
+        >
+          編集
+        </Link>
       </div>
 
       {/* error list */}

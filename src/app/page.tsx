@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { AppProvider, useApp } from "@/context/AppContext";
+import { useApp } from "@/context/AppContext";
 import StudentPanel from "@/components/StudentPanel";
 import ConfigPanel from "@/components/ConfigPanel";
 import SeatGrid from "@/components/SeatGrid";
@@ -199,9 +199,5 @@ function Workspace() {
 }
 
 export default function Page() {
-  return (
-    <AppProvider>
-      <Workspace />
-    </AppProvider>
-  );
+  return <Workspace />;
 }
