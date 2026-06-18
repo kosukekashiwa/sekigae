@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/context/AppContext";
+import Header from "@/components/Header";
 import { Gender, RowError, Student } from "@/lib/types";
 import {
   buildTemplateStudents,
@@ -78,18 +79,18 @@ export default function StudentsEditPage() {
   }
 
   function handleComplete() {
-    setData(draft, validateStudents(draft));
+    const errs = validateStudents(draft);
+    if (errs.length > 0) {
+      setErrors(errs);
+      return;
+    }
+    setData(draft, errs);
     router.push("/");
   }
 
   return (
     <div className="flex h-screen flex-col">
-      <header className="flex h-14 shrink-0 items-center gap-2 bg-indigo-700 px-5 text-white shadow">
-        <span className="text-xl" aria-hidden="true">
-          🪑
-        </span>
-        <h1 className="text-lg font-bold tracking-wide">生徒一覧編集</h1>
-      </header>
+      <Header />
 
       <div className="flex min-h-0 flex-1 items-center justify-center bg-gray-50 lg:hidden">
         <p className="text-sm font-medium text-gray-600">
@@ -98,6 +99,11 @@ export default function StudentsEditPage() {
       </div>
 
       <div className="hidden min-h-0 flex-1 flex-col lg:flex">
+        <div className="px-3 pt-3">
+          <h2 className="text-base font-semibold text-gray-800">
+            生徒一覧編集
+          </h2>
+        </div>
         <div className="flex flex-wrap gap-2 border-b border-gray-200 p-3">
           <button
             onClick={handleBack}

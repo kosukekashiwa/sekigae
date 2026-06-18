@@ -100,7 +100,7 @@ export default function StudentPanel({
       <div className="flex-1 overflow-auto p-3">
         {students.length === 0 ? (
           <p className="px-1 py-6 text-center text-sm text-gray-500">
-            生徒一覧のcsvをインポートしてください。
+            生徒一覧のcsvをインポート、または、「編集」から設定してください。
           </p>
         ) : (
           <table className="w-full table-fixed text-sm">
