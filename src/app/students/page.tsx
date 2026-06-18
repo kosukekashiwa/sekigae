@@ -52,6 +52,20 @@ export default function StudentsEditPage() {
     setDraft((prev) => renumber(prev.filter((_, i) => i !== index)));
   }
 
+  function handleInsertRow(index: number) {
+    setDraft((prev) => {
+      const next = [...prev];
+      next.splice(index + 1, 0, {
+        attendanceNo: 0,
+        name: "",
+        gender: "男",
+        reservedSeat: null,
+        assignedSeat: null,
+      });
+      return renumber(next);
+    });
+  }
+
   function handleExport() {
     downloadCsv("students.csv", studentsToCsv(draft));
   }
@@ -168,7 +182,7 @@ export default function StudentsEditPage() {
                 <th className="w-[120px] py-1.5">名前</th>
                 <th className="w-24 py-1.5">性別</th>
                 <th className="w-32 py-1.5">予約座席番号</th>
-                <th className="w-16 py-1.5">操作</th>
+                <th className="w-28 py-1.5">操作</th>
               </tr>
             </thead>
             <tbody>
@@ -211,13 +225,22 @@ export default function StudentsEditPage() {
                     />
                   </td>
                   <td className="py-1.5 align-middle">
-                    <button
-                      onClick={() => handleDeleteRow(i)}
-                      title="削除"
-                      className="rounded bg-rose-600 px-1.5 py-1 text-xs text-white hover:bg-rose-700"
-                    >
-                      削除
-                    </button>
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => handleInsertRow(i)}
+                        title="この下に行を追加"
+                        className="rounded bg-sky-600 px-1.5 py-1 text-xs text-white hover:bg-sky-700"
+                      >
+                        追加
+                      </button>
+                      <button
+                        onClick={() => handleDeleteRow(i)}
+                        title="削除"
+                        className="rounded bg-rose-600 px-1.5 py-1 text-xs text-white hover:bg-rose-700"
+                      >
+                        削除
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
