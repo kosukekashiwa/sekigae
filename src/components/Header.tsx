@@ -11,15 +11,15 @@ export default function Header({ children }: HeaderProps) {
         🪑
       </span>
       <h1 className="text-lg font-bold tracking-wide">席替えアプリ</h1>
+      {children}
       <a
         href="https://github.com/kosukekashiwa/sekigae#readme"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-sm font-medium text-indigo-100 underline-offset-2 hover:text-white hover:underline"
+        className="ml-auto text-sm font-medium text-indigo-100 underline-offset-2 hover:text-white hover:underline"
       >
         使い方
       </a>
-      {children}
     </header>
   );
 }
