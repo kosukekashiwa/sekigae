@@ -171,12 +171,15 @@ export default function StudentsEditPage() {
                   <td className="py-1.5 align-middle pr-2">
                     <input
                       type="number"
+                      min={1}
+                      step={1}
                       value={s.attendanceNo}
-                      onChange={(e) =>
-                        updateRow(i, {
-                          attendanceNo: parseInt(e.target.value, 10) || 0,
-                        })
-                      }
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value, 10);
+                        if (Number.isInteger(value) && value > 0) {
+                          updateRow(i, { attendanceNo: value });
+                        }
+                      }}
                       className="w-full rounded border border-gray-300 px-2 py-1"
                     />
                   </td>
