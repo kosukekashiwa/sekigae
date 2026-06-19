@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { Student, SeatConfig, Grid, RowError } from "@/lib/types";
 import { ensureConfigLength } from "@/lib/seating";
+import { buildTemplateStudents } from "@/lib/csv";
 
 interface AppState {
   students: Student[];
@@ -37,7 +38,9 @@ function makeDefaultConfigs(grid: Grid): SeatConfig[] {
 }
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [students, setStudents] = useState<Student[]>([]);
+  const [students, setStudents] = useState<Student[]>(() =>
+    buildTemplateStudents(),
+  );
   const [errors, setErrors] = useState<RowError[]>([]);
   const [grid, setGridState] = useState<Grid>(DEFAULT_GRID);
   const [configs, setConfigs] = useState<SeatConfig[]>(() =>
