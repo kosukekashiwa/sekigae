@@ -52,29 +52,29 @@ export default function SeatTile({
             : "cursor-default",
         ].join(" ")}
       >
-        {disabled ? (
-          <div className="flex h-full items-center justify-center text-2xl text-gray-500">
-            ×
+        <div className="flex h-full flex-col">
+          <span className="text-[10px] font-semibold opacity-70">
+            No.{view.seatNo}
+            {view.config.priority && (
+              <span
+                className="ml-1 text-green-600"
+                aria-label="優先席"
+                title="優先席"
+              >
+                ★
+              </span>
+            )}
+          </span>
+          <div className="flex flex-1 items-center justify-center">
+            {disabled ? (
+              <span className="text-2xl text-gray-500">×</span>
+            ) : (
+              <span className="ellipsis text-sm font-medium">
+                {occupant ? occupant.name : " "}
+              </span>
+            )}
           </div>
-        ) : (
-          <div className="flex h-full flex-col">
-            <span className="text-[10px] font-semibold opacity-70">
-              No.{view.seatNo}
-              {view.config.priority && (
-                <span
-                  className="ml-1 text-green-600"
-                  aria-label="優先席"
-                  title="優先席"
-                >
-                  ★
-                </span>
-              )}
-            </span>
-            <span className="ellipsis mt-auto text-sm font-medium">
-              {occupant ? occupant.name : "\u00A0"}
-            </span>
-          </div>
-        )}
+        </div>
       </button>
 
       {/* × clear button — sibling of the body so it works in any mode */}
