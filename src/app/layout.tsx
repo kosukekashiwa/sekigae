@@ -42,6 +42,9 @@ export const metadata: Metadata = {
     description:
       "クラスの座席をランダムに決める無料ツール。生徒登録・座席設定・指定席に対応。",
   },
+  verification: {
+    google: "4GX0P8GM8XZkgrTZoh01J9U4ckm4yIGf3R7mKdWOww0",
+  },
 };
 
 const jsonLd = {
