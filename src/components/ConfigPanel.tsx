@@ -1,7 +1,9 @@
 "use client";
 
+import { useRef } from "react";
 import { useApp } from "@/context/AppContext";
 import { RadioKind } from "@/lib/types";
+import { seatConfigToCsv, parseSeatConfigCsv, downloadCsv } from "@/lib/csv";
 
 interface ConfigPanelProps {
   selectedKind: RadioKind;
@@ -24,7 +26,38 @@ export default function ConfigPanel({
   selectedKind,
   onSelectKind,
 }: ConfigPanelProps) {
-  const { grid, setGrid, resetSeatConfigs } = useApp();
+  const { grid, configs, setGrid, resetSeatConfigs, importSeatConfig } =
+    useApp();
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  function handleExport() {
+    const csv = seatConfigToCsv(grid, configs);
+    downloadCsv("seat-config.csv", csv);
+  }
+
+  function handleImportClick() {
+    fileRef.current?.click();
+  }
+
+  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = String(reader.result ?? "");
+      const { grid: parsedGrid, configs: parsedConfigs, errors } =
+        parseSeatConfigCsv(text);
+      if (errors.length > 0 || parsedGrid == null) {
+        window.alert(
+          ["CSVの読み込みに失敗しました。", ...errors].join("\n"),
+        );
+        return;
+      }
+      importSeatConfig(parsedGrid, parsedConfigs);
+    };
+    reader.readAsText(file, "UTF-8");
+    e.target.value = "";
+  }
 
   return (
     <div className="flex h-full flex-col gap-5 p-4">
@@ -101,6 +134,38 @@ export default function ConfigPanel({
             </label>
           ))}
         </div>
+      </section>
+
+      <section>
+        <h3 className="mb-2 text-sm font-semibold text-gray-700">
+          設定の入出力
+        </h3>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={handleExport}
+            className="flex-1 rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+          >
+            エクスポート
+          </button>
+          <button
+            type="button"
+            onClick={handleImportClick}
+            className="flex-1 rounded-md bg-sky-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-sky-700"
+          >
+            インポート
+          </button>
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".csv,text/csv"
+            onChange={handleFile}
+            className="hidden"
+          />
+        </div>
+        <p className="mt-1 text-xs text-gray-400">
+          座席数と各座席の種類・優先席の設定をCSVで出力・読込します。
+        </p>
       </section>
 
       <section>

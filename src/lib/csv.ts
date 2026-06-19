@@ -1,6 +1,11 @@
-import { Student, Gender, RowError } from "./types";
+import { Student, Gender, RowError, Grid, SeatConfig, SeatKind } from "./types";
 
 export const CSV_HEADER = ["出席番号", "名前", "性別", "予約座席番号"];
+
+export const SEAT_GRID_CSV_HEADER = ["縦列数", "横行数"];
+export const SEAT_CONFIG_CSV_HEADER = ["座席番号", "種類", "優先席"];
+
+const SEAT_KINDS: SeatKind[] = ["none", "male", "female", "disabled"];
 
 /** Build the 40-student template (生徒1..40, all 男, no reservation) */
 export function buildTemplateStudents(): Student[] {
@@ -70,6 +75,108 @@ function splitCsvLine(line: string): string[] {
   }
   out.push(cur);
   return out;
+}
+
+/** Serialize the seat grid size and per-seat configuration to CSV. */
+export function seatConfigToCsv(grid: Grid, configs: SeatConfig[]): string {
+  const lines = [
+    SEAT_GRID_CSV_HEADER.join(","),
+    [String(grid.cols), String(grid.rows)].join(","),
+    "",
+    SEAT_CONFIG_CSV_HEADER.join(","),
+  ];
+  configs.forEach((c, i) => {
+    lines.push(
+      [String(i + 1), c.kind, c.priority ? "true" : "false"].join(","),
+    );
+  });
+  return lines.join("\r\n");
+}
+
+export interface SeatConfigParseResult {
+  grid: Grid | null;
+  configs: SeatConfig[];
+  errors: string[];
+}
+
+function parseSeatInt(raw: string): number | null {
+  const t = raw.trim();
+  if (!/^[0-9]+$/.test(t)) return null;
+  return parseInt(t, 10);
+}
+
+/** Parse seat grid + seat configuration CSV text (as produced by seatConfigToCsv). */
+export function parseSeatConfigCsv(text: string): SeatConfigParseResult {
+  const normalized = text
+    .replace(/^﻿/, "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n");
+  const rawLines = normalized.split("\n");
+  const errors: string[] = [];
+
+  let i = 0;
+  while (i < rawLines.length && rawLines[i].trim() === "") i++;
+  if (i >= rawLines.length) {
+    return { grid: null, configs: [], errors: ["CSVが空です。"] };
+  }
+
+  let grid: Grid | null = null;
+  const gridHeader = splitCsvLine(rawLines[i]).map((c) => c.trim());
+  if (
+    gridHeader[0] === SEAT_GRID_CSV_HEADER[0] &&
+    gridHeader[1] === SEAT_GRID_CSV_HEADER[1]
+  ) {
+    i++;
+    if (i < rawLines.length) {
+      const cols = splitCsvLine(rawLines[i]).map((c) => c.trim());
+      i++;
+      const c = parseSeatInt(cols[0] ?? "");
+      const r = parseSeatInt(cols[1] ?? "");
+      if (c != null && r != null && c >= 1 && c <= 8 && r >= 1 && r <= 8) {
+        grid = { cols: c, rows: r };
+      } else {
+        errors.push("縦列数・横行数は1〜8の半角数字で設定してください。");
+      }
+    }
+  } else {
+    errors.push("座席数の見出し行が見つかりません。");
+  }
+
+  while (i < rawLines.length && rawLines[i].trim() === "") i++;
+
+  if (i < rawLines.length) {
+    const header = splitCsvLine(rawLines[i]).map((c) => c.trim());
+    if (header[0] === SEAT_CONFIG_CSV_HEADER[0]) i++;
+  }
+
+  const configs: SeatConfig[] = [];
+  for (; i < rawLines.length; i++) {
+    const line = rawLines[i];
+    if (line.trim() === "") continue;
+    const cols = splitCsvLine(line);
+    const seatNoRaw = (cols[0] ?? "").trim();
+    const kindRaw = (cols[1] ?? "").trim();
+    const priorityRaw = (cols[2] ?? "").trim();
+
+    const seatNo = parseSeatInt(seatNoRaw);
+    if (seatNo == null) {
+      errors.push(`座席番号「${seatNoRaw}」が不正です。`);
+      continue;
+    }
+    if (!SEAT_KINDS.includes(kindRaw as SeatKind)) {
+      errors.push(`座席番号 ${seatNo}: 種類「${kindRaw}」は不正です。`);
+      continue;
+    }
+    configs[seatNo - 1] = {
+      kind: kindRaw as SeatKind,
+      priority: /^(true|1)$/i.test(priorityRaw),
+    };
+  }
+  for (let j = 0; j < configs.length; j++) {
+    if (!configs[j]) configs[j] = { kind: "none", priority: false };
+  }
+
+  return { grid, configs, errors };
 }
 
 export interface ParseResult {
