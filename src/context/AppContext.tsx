@@ -27,6 +27,7 @@ interface AppState {
   clearSeat: (attendanceNo: number) => void;
   clearSeatByNo: (seatNo: number) => void;
   resetSeatConfigs: () => void;
+  importSeatConfig: (grid: Grid, configs: SeatConfig[]) => void;
 }
 
 const Ctx = createContext<AppState | null>(null);
@@ -127,6 +128,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
   }, [grid]);
 
+  const importSeatConfig = useCallback(
+    (g: Grid, cfgs: SeatConfig[]) => {
+      const clamped: Grid = {
+        cols: Math.min(8, Math.max(1, g.cols)),
+        rows: Math.min(8, Math.max(1, g.rows)),
+      };
+      setGridState(clamped);
+      setConfigs(ensureConfigLength(cfgs, clamped));
+      const max = clamped.cols * clamped.rows;
+      setStudents((prev) =>
+        prev.map((st) =>
+          st.assignedSeat != null && st.assignedSeat > max
+            ? { ...st, assignedSeat: null }
+            : st,
+        ),
+      );
+    },
+    [],
+  );
+
   const value = useMemo<AppState>(
     () => ({
       students,
@@ -140,6 +161,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       clearSeat,
       clearSeatByNo,
       resetSeatConfigs,
+      importSeatConfig,
     }),
     [
       students,
@@ -153,6 +175,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       clearSeat,
       clearSeatByNo,
       resetSeatConfigs,
+      importSeatConfig,
     ],
   );
 
