@@ -166,7 +166,7 @@ export default function StudentsEditPage() {
               if (v === "" || /^[0-9]+$/.test(v)) setBulkCount(v);
             }}
             placeholder="人数"
-            className="w-20 rounded-md border border-gray-300 px-2 py-1.5 text-sm"
+            className="w-20 rounded-md border border-gray-300 px-2 py-1.5 text-sm ml-8"
           />
           <button
             onClick={handleBulkChange}
