@@ -7,10 +7,10 @@ export const SEAT_CONFIG_CSV_HEADER = ["座席番号", "種類", "優先席"];
 
 const SEAT_KINDS: SeatKind[] = ["none", "male", "female", "disabled"];
 
-/** Build the 40-student template (生徒1..40, all 男, no reservation) */
-export function buildTemplateStudents(): Student[] {
+/** Build a student template (生徒1..count, all 男, no reservation) */
+export function buildTemplateStudents(count: number = 40): Student[] {
   const list: Student[] = [];
-  for (let i = 1; i <= 40; i++) {
+  for (let i = 1; i <= count; i++) {
     list.push({
       attendanceNo: i,
       name: `生徒${i}`,

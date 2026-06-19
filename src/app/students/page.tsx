@@ -22,6 +22,7 @@ export default function StudentsEditPage() {
     renumber(students.length > 0 ? students : buildTemplateStudents()),
   );
   const [errors, setErrors] = useState<RowError[]>([]);
+  const [bulkCount, setBulkCount] = useState("");
 
   function renumber(list: Student[]): Student[] {
     return list.map((s, i) => ({ ...s, attendanceNo: i + 1 }));
@@ -50,6 +51,12 @@ export default function StudentsEditPage() {
 
   function handleDeleteRow(index: number) {
     setDraft((prev) => renumber(prev.filter((_, i) => i !== index)));
+  }
+
+  function handleBulkChange() {
+    const count = parseInt(bulkCount, 10);
+    if (!Number.isInteger(count) || count < 1) return;
+    setDraft(renumber(buildTemplateStudents(count)));
   }
 
   function handleInsertRow(index: number) {
@@ -149,6 +156,24 @@ export default function StudentsEditPage() {
             className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100"
           >
             行を追加
+          </button>
+          <input
+            type="text"
+            inputMode="numeric"
+            value={bulkCount}
+            onChange={(e) => {
+              const v = e.target.value;
+              if (v === "" || /^[0-9]+$/.test(v)) setBulkCount(v);
+            }}
+            placeholder="人数"
+            className="w-20 rounded-md border border-gray-300 px-2 py-1.5 text-sm"
+          />
+          <button
+            onClick={handleBulkChange}
+            disabled={!/^[1-9][0-9]*$/.test(bulkCount)}
+            className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            人に一括変更
           </button>
           <button
             onClick={handleComplete}
