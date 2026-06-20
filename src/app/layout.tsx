@@ -26,6 +26,9 @@ export const metadata: Metadata = {
     "教室",
     "無料",
     "先生",
+    "視力",
+    "指定席",
+    "優先",
   ],
   metadataBase: new URL(siteUrl),
   openGraph: {
