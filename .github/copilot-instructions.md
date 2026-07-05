@@ -1,40 +1,41 @@
 # GitHub Copilot Instructions
 
-このファイルは GitHub Copilot（Chat / コーディングエージェント）がこのリポジトリで作業する際の共通指示です。詳細は [AGENTS.md](../AGENTS.md) を参照してください。
+このファイルは GitHub Copilot（Chat / コーディングエージェント）がこのリポジトリで作業する際の共通指示です。
 
-## プロジェクト概要
+> **Note**: GitHub Copilot は Claude Code の `@AGENTS.md` のようなインポート構文をサポートしていないため、[AGENTS.md](../AGENTS.md) の内容の一部をこのファイルにも転記しています。**内容を更新する際は両方のファイルを同期させてください。** ブランチ命名・Issue 駆動開発のルールなど、開発ワークフローの詳細は [AGENTS.md の Git Workflow / Boundaries](../AGENTS.md) を正とします。
 
-学校の座席抽選を支援する Next.js (App Router) + TypeScript + React 製の Web アプリです。仕様は [README.md](../README.md) を参照してください。
+## Project Overview
 
-## 開発コマンド
+「席替えアプリ」は、学校の座席抽選を支援する Next.js (App Router) + TypeScript + React 製の Web アプリです。
 
-```bash
-npm install
-npm run dev     # 開発サーバー
-npm run build   # 本番ビルド
-npm run lint    # ESLint
-```
+- **対象ユーザー**: 生徒の座席を決める教員・担任
+- **主要機能**: 生徒一覧の登録・CSV インポート/エクスポート、座席レイアウト設定（列数・行数・座席種別）、座席のランダム抽選・個別指定
+- 詳細な機能仕様は [README.md](../README.md) を参照してください。
 
-コードを変更したら、必ず `npm run lint` を実行してエラーがないことを確認してください。
+## Tech Stack
 
-## ディレクトリ構成
+- **Frontend**: Next.js (App Router) / React / TypeScript / Tailwind CSS
+- **Backend/API**: 専用のバックエンドサーバー・外部 API 呼び出しはなし。状態は `src/context` の React Context によりクライアント側で完結する。
+- **Testing**: 自動テストフレームワークは未導入。`npm run lint` / `npm run build` と、`npm run dev` によるブラウザでの手動確認で品質を担保する。
 
-- `src/app`: ページ・ルーティング
-- `src/components`: UI コンポーネント
-- `src/context`: アプリ状態管理（React Context）
-- `src/lib`: 座席抽選・CSV 変換などのドメインロジックと型定義
-
-## コーディング方針
+## Coding Guidelines
 
 - TypeScript の型を明示し、`any` は使わない。
+- セミコロン等のフォーマットは ESLint (`eslint-config-next`, `eslint.config.mjs`) の設定に従う（`npm run lint` で確認）。
 - ドメインロジック（抽選アルゴリズム、CSV 変換など）は `src/lib` に置き、UI と分離する。
 - 既存のファイル・ディレクトリの命名規則に合わせる。
 - 自明な内容のコメントは書かない。「なぜ」が非自明な場合のみ最小限のコメントを残す。
+- **セキュリティ**: ユーザーがアップロードする CSV（`src/lib/csv.ts`）は信頼できない入力として扱い、パース時のバリデーションを維持・強化する。外部通信や `dangerouslySetInnerHTML` など XSS リスクのある API は使用しない。
 
-## Issue駆動開発のルール
+## Project Structure
 
-- 実装は必ず対応する Issue の内容に基づいて行い、要件が不明な場合は実装前に質問する。
-- 1つの変更（PR）は1つの Issue のスコープに留める。
-- ブランチは `develop` から作成し、`feature/<説明>` または `fix/<説明>` の命名規則に従う（`.github/workflows/claude.yml` 参照）。
-- PR は `develop` ブランチに向けて作成し、対応する Issue 番号を説明に含める。
-- コミット前に `npm run lint` を実行し、可能であれば `npm run build` も確認する。
+- `src/app`: ページ・ルーティング（Next.js App Router）
+- `src/components`: UI コンポーネント（`ConfigPanel`, `Header`, `SeatGrid`, `SeatTile`, `StudentPanel` など）
+- `src/context`: アプリ状態管理（React Context, `AppContext.tsx`）
+- `src/lib`: 座席抽選・CSV 変換などのドメインロジックと型定義（`seating.ts`, `csv.ts`, `types.ts`）
+
+## Resources
+
+- **開発スクリプト**: `npm run dev`（開発サーバー） / `npm run build`（本番ビルド） / `npm run start`（本番起動確認） / `npm run lint`（ESLint）
+- **MCP サーバー**: このリポジトリでは現時点で利用していません。
+- **自動化ツール**: `.github/workflows/claude.yml` により、Issue/PR で `@claude` にメンションすると Claude Code が git-flow（base: `develop`）に従って対応します。ブランチ命名・Issue 連携などのルールは [AGENTS.md](../AGENTS.md) を参照してください。
