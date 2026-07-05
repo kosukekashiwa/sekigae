@@ -2,7 +2,7 @@
 
 このリポジトリで作業する AI コーディングエージェント（GitHub Copilot, Claude Code など）向けの汎用ガイドです。
 
-> **Note**: GitHub Copilot は Claude Code の `@AGENTS.md` のようなインポート構文をサポートしていないため、プロジェクト概要・技術スタック・コーディング規約は [.github/copilot-instructions.md](./.github/copilot-instructions.md) にも転記しています。**内容を更新する際は両方のファイルを同期させてください。**
+> **Note**: GitHub Copilot は Claude Code の `@AGENTS.md` のようなインポート構文をサポートしていないため、[.github/copilot-instructions.md](./.github/copilot-instructions.md) にも本ファイルと重複する内容（プロジェクト概要、コーディング規約など）を記載しています（技術スタックなど copilot-instructions.md 独自のセクションもあります）。**内容を更新する際は両方のファイルを同期させてください。**
 
 ## Project Overview
 

@@ -21,7 +21,7 @@
 ## Coding Guidelines
 
 - TypeScript の型を明示し、`any` は使わない。
-- セミコロン等のフォーマットは ESLint (`eslint-config-next`, `eslint.config.mjs`) の設定に従う（`npm run lint` で確認）。
+- セミコロンの有無など細かいフォーマットは ESLint では強制されない（`eslint.config.mjs` に該当ルールなし、Prettier 未導入）ため、既存コード（セミコロンあり）のスタイルに合わせる。
 - ドメインロジック（抽選アルゴリズム、CSV 変換など）は `src/lib` に置き、UI と分離する。
 - 既存のファイル・ディレクトリの命名規則に合わせる。
 - 自明な内容のコメントは書かない。「なぜ」が非自明な場合のみ最小限のコメントを残す。
